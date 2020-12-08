@@ -26,3 +26,11 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+function showMoreAboutPhoebe(){
+    var button = document.createElement("button");
+button.innerHTML = "Do Something";
+button.addEventListener ("click", function() {
+  alert("did something");
+});
+}
