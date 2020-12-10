@@ -28,14 +28,13 @@ function addRandomGreeting() {
  greetingContainer.innerText = greeting;
 }
  
-function nextPicture(prefix){
-   currentIndex++;
+function nextPicture(prefix,numPictures){
+   currentIndex = (currentIndex + 1) % numPictures;
    showImageAndDescription(prefix);
 }
  
-function prevPicture(prefix){
-   if(currentIndex < 0) return;
-   currentIndex--;
+function prevPicture(prefix,numPictures){
+   currentIndex = (currentIndex - 1) % numPictures;
    showImageAndDescription(prefix);
 }
  
@@ -57,11 +56,9 @@ function showImageAndDescription(prefix){
    const descriptionContainer = document.getElementById('greeting-container');
    var imgURL;
    if(prefix === 'pro'){
-       if(currentIndex >= proDescription.length){return;}
        descriptionContainer.innerText = proDescription[currentIndex];
        imgUrl = 'images/pro-'  + currentIndex + '.jpg';
    } else {
-       if(currentIndex >= personalDescription.length){return;}
        descriptionContainer.innerText = personalDescription[currentIndex];
        imgUrl = 'images/personal-'  + currentIndex + '.jpg';
    }
