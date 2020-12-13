@@ -27,18 +27,31 @@ function addRandomGreeting() {
  const greetingContainer = document.getElementById('greeting-container');
  greetingContainer.innerText = greeting;
 }
- 
+
+/**
+ * Move the current index to the next picture and display it.
+ * @param {*} prefix -- prefix of the current HTML page.
+ * @param {*} numPictures -- total number of pictures in the page.
+ */
 function nextPicture(prefix,numPictures){
    currentIndex = (currentIndex + 1) % numPictures;
    showImageAndDescription(prefix);
 }
- 
+
+/**
+ * Move the current index to the previous picture and display it.
+ * @param {*} prefix -- prefix of the current HTML page.
+ * @param {*} numPictures -- total number of pictures in the page.
+ */
 function prevPicture(prefix,numPictures){
    currentIndex = (currentIndex - 1) % numPictures;
    showImageAndDescription(prefix);
 }
  
- 
+/**
+ * Display the current image with it's description base on the HTML page.
+ * @param {*} prefix -- prefix of the current HTML page.
+ */
 function showImageAndDescription(prefix){
    if(currentIndex < 0){return;}
    const proDescription = ['Hi My name is Phoebe Khokgawe. I am 21 years old.',
@@ -74,5 +87,44 @@ function showImageAndDescription(prefix){
    imageContainer.innerHTML = '';
    imageContainer.appendChild(imgElement);
 }
+
+/**
+ * Fetches data from the server and adds it to the DOM.
+ */
+function getData() {
+  console.log('Fetching data...');
+
+  // The fetch() function returns a Promise because the request is asynchronous.
+  const responsePromise = fetch('/data');
+
+  // When the request is complete, pass the response into handleResponse().
+  responsePromise.then(handleResponse);
+}
+
+/**
+ * Handles response by converting it to text and passing the result to
+ * addDataToDom().
+ */
+function handleResponse(response) {
+  console.log('Handling the response.');
+
+  // response.text() returns a Promise, because the response is a stream of
+  // content and not a simple variable.
+  const textPromise = response.text();
+
+  // When the response is converted to text, pass the result into the
+  // addQuoteToDom() function.
+  textPromise.then(addDataToDom);
+}
+
+/** Adds data to the DOM. */
+function addDataToDom(data) {
+  console.log('Adding text to dom: ' + data);
+
+  const dataContainer = document.getElementById('data-container');
+  dataContainer.innerText = data;
+}
+
+
  
 
