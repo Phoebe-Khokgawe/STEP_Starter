@@ -54,9 +54,8 @@ public class DataServlet extends HttpServlet {
 
     Gson gson = new Gson();
 
-    response.setContentType("application/json");
-    response.getWriter().write(gson.toJson(toSendOver));
-    response.sendRedirect("/postRequest.html");
+    response.setContentType("text/json");
+    response.getWriter().println(gson.toJson(toSendOver));
     
   }
 
