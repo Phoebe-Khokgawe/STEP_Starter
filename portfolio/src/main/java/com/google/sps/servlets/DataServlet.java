@@ -16,12 +16,20 @@ package com.google.sps.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
@@ -32,22 +40,29 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-    ArrayList<String> jsonString = new ArrayList<>();
-    addToList();
-    for(String obj : strings){
-        jsonString.add(convertToJSON(obj));
+
+    Query query = new Query("Comments").addSort("comment", SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    ArrayList<String> toSendOver = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+        System.out.println(entity);
+        String title = (String) entity.getProperty("comment");
+        toSendOver.add(title);
     }
 
-    response.setContentType("text/html;");
-    int randomIndex = (int)Math.floor(Math.random() * ((int)jsonString.size()));
-    System.out.print(jsonString.size() + " randome num: " + randomIndex);
-    response.getWriter().println(jsonString.get(randomIndex).toString());
+    Gson gson = new Gson();
+
+    response.setContentType("application/json");
+    response.getWriter().write(gson.toJson(toSendOver));
+    response.sendRedirect("/postRequest.html");
+    
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
-    String text = getParameter(request, "text-input", "");
+    String text = getParameter(request, "comment", "");
     boolean upperCase = Boolean.parseBoolean(getParameter(request, "upper-case", "false"));
     
     // Convert the text to upper case.
@@ -58,9 +73,16 @@ public class DataServlet extends HttpServlet {
     //@TODO color still need to be implemented 
 
     // Respond with the result.
-    response.setContentType("text/html;");
-    response.getWriter().println("Thanks for your comment: \n\"" + text + "\"\n Hope you have a good day!");
-    
+    // response.setContentType("text/html;");
+    // response.getWriter().println("Thanks for your comment: \n\"" + text + "\"\n Hope you have a good day!");
+
+    //entity is an object to add to datastore for storing the comments perminantly
+    Entity commentsEntity = new Entity("Comments");
+    commentsEntity.setProperty("comment", text);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentsEntity);
+    response.sendRedirect("/postRequest.html");
   }
 
   /**

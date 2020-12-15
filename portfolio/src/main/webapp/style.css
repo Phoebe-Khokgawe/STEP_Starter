@@ -43,3 +43,7 @@ body {
   max-width: 500px;
 
 }
+
+#comments-list {
+  list-style-type: none;
+}

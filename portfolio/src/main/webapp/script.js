@@ -87,42 +87,41 @@ function showImageAndDescription(prefix){
    imageContainer.innerHTML = '';
    imageContainer.appendChild(imgElement);
 }
+// /** Adds data to the DOM. */
+// function addDataToDom(data) {
+//   console.log('Adding text to dom: ' + data);
+
+//   const dataContainer = document.getElementById('data-container');
+//   dataContainer.innerText = data;
+// }
 
 /**
- * Fetches data from the server and adds it to the DOM.
+ * Fetch all the comments from the server and add it to DOM.
  */
-function getData() {
-  console.log('Fetching data...');
+function loadComments(){
+    fetch('/data')
+        .then(response => response.json())
+        .then((comments) => {
+            console.log(comments);
+        const taskListElement = document.getElementById('comments-list');
+    //printout the response
+    //try normal for loop
+    
 
-  // The fetch() function returns a Promise because the request is asynchronous.
-  const responsePromise = fetch('/data');
-
-  // When the request is complete, pass the response into handleResponse().
-  responsePromise.then(handleResponse);
+        for (i = 0; i < comments.length; i++) {
+            taskListElement.appendChild(createCommentElement(comments[i]));
+        }
+  });
 }
 
-/**
- * Handles response by converting it to text and passing the result to
- * addDataToDom().
- */
-function handleResponse(response) {
-  console.log('Handling the response.');
+function createCommentElement(comment){
+    const commentElement = document.createElement('li');
+    commentElement.innerText = comment;
 
-  // response.text() returns a Promise, because the response is a stream of
-  // content and not a simple variable.
-  const textPromise = response.text();
+    console.log('print' + comment);
+  
+  return commentElement;
 
-  // When the response is converted to text, pass the result into the
-  // addQuoteToDom() function.
-  textPromise.then(addDataToDom);
-}
-
-/** Adds data to the DOM. */
-function addDataToDom(data) {
-  console.log('Adding text to dom: ' + data);
-
-  const dataContainer = document.getElementById('data-container');
-  dataContainer.innerText = data;
 }
 
 
