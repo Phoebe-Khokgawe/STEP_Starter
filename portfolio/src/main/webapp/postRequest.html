@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Post Request</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <h1>Post Request</h1>
+    <div id="content">
+
+    <form action="/data" method="POST">
+
+      <p>What do you think about this website:</p>
+      <textarea name="text-input">I think ...</textarea>
+      <br/><br/>
+
+      <p>Choose some options:</p>
+      <input type="checkbox" name="upper-case" value="true"> Upper-case
+      <br/>
+      <input type="color" name="text-colour" value="true"> Text-Colour
+      <br/><br/>
+
+      <input type="submit" />
+    </form>
+    </div>
+  </body>
+</html>
