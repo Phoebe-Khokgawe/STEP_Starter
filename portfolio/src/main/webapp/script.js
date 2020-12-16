@@ -99,16 +99,18 @@ function showImageAndDescription(prefix){
  * Fetch all the comments from the server and add it to DOM.
  */
 function loadComments(){
-    fetch('/data')
+    var maxComments = document.getElementById("quantity").value;
+    fetch('/data?quantity=' + maxComments)
         .then(response => response.json())
         .then((comments) => {
-            console.log(comments);
+            console.log(maxComments + 'Maximum comments');
         const taskListElement = document.getElementById('comments-list');
     //printout the response
     //try normal for loop
-    
+        const displayedComments = maxComments < comments.length ? maxComments : comments.length;
+        taskListElement.innerHTML = 'Displaying ' + displayedComments + ' comments'; 
 
-        for (i = 0; i < comments.length; i++) {
+        for (i = 1; i < displayedComments; i++) {
             taskListElement.appendChild(createCommentElement(comments[i]));
         }
   });
@@ -124,6 +126,14 @@ function createCommentElement(comment){
 
 }
 
+function deleteAllComments(){
+    const request = new Request('/delete-data', {method: 'POST'});
+    fetch(request)
+    .then((reload) => {
+        loadComments();
+    });
+
+}
 
  
 

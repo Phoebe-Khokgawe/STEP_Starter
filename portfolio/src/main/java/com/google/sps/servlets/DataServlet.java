@@ -36,7 +36,7 @@ import com.google.gson.Gson;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-    ArrayList<String> strings = new ArrayList<>();
+   private int numOfComments = 1;
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -44,8 +44,8 @@ public class DataServlet extends HttpServlet {
     Query query = new Query("Comments").addSort("comment", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-
     ArrayList<String> toSendOver = new ArrayList<>();
+    toSendOver.add(String. valueOf(numOfComments));
     for (Entity entity : results.asIterable()) {
         System.out.println(entity);
         String title = (String) entity.getProperty("comment");
@@ -62,6 +62,9 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from the form.
     String text = getParameter(request, "comment", "");
+    String quantity = getParameter(request,"quantity","4");
+    numOfComments = Integer.parseInt(quantity.equals("")?"1":quantity);
+    
     boolean upperCase = Boolean.parseBoolean(getParameter(request, "upper-case", "false"));
     
     // Convert the text to upper case.
@@ -97,15 +100,6 @@ public class DataServlet extends HttpServlet {
   }
 
   /**
-   * Add normal strings to the list.
-   */
-  public void addToList(){
-      strings.add("cat,orange");
-      strings.add("dog,brown");
-      strings.add("bird,green");
-  }
-
-  /**
    * Convert normal string to JSON type string.
    * @param string -- normal string.
    * @return JSON type string.
@@ -114,18 +108,6 @@ public class DataServlet extends HttpServlet {
         Gson gson = new Gson();
         String[] spliString = string.split(",");
         String jsonString = "{\"type\": \"" + spliString[0]  + "\", \"color\": \"" + spliString[1] + "\"}"; 
-        Animal animal = gson.fromJson(jsonString, Animal.class);
-        String json = gson.toJson(animal);
-        return json;
+        return jsonString;
   }
-}
-
-class Animal{
-    private String type;
-    private String color;
-   public Animal(){} 
-
-    public Animal fromJson(String jsonString, Class<Animal> class1) {
-        return null;
-    }
 }
