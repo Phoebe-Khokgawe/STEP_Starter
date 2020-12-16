@@ -27,9 +27,10 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html;");
-    int randomIndex = (int)Math.floor(Math.random() * ((int)jsonString.size()));
-    System.out.print(jsonString.size() + " randome num: " + randomIndex);
-    response.getWriter().println(jsonString.get(randomIndex).toString());
+    String jsonString = "{ \"Animal\" : \"CAT\" }";
+    // int randomIndex = (int)Math.floor(Math.random() * ((int)jsonString.size()));
+    // System.out.print(jsonString.size() + " randome num: " + randomIndex);
+    response.getWriter().println(jsonString);
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
