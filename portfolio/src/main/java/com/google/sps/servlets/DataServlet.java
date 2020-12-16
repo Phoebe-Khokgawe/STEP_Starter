@@ -41,11 +41,10 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    Query query = new Query("Comments").addSort("comment", SortDirection.DESCENDING);
+    Query query = new Query("Comments").addSort("time", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     ArrayList<String> toSendOver = new ArrayList<>();
-    toSendOver.add(String. valueOf(numOfComments));
     for (Entity entity : results.asIterable()) {
         System.out.println(entity);
         String title = (String) entity.getProperty("comment");
@@ -55,6 +54,7 @@ public class DataServlet extends HttpServlet {
     Gson gson = new Gson();
 
     response.setContentType("text/json");
+    System.out.println(toSendOver.toString());
     response.getWriter().println(gson.toJson(toSendOver));
     
   }
@@ -63,6 +63,7 @@ public class DataServlet extends HttpServlet {
     // Get the input from the form.
     String text = getParameter(request, "comment", "");
     String quantity = getParameter(request,"quantity","4");
+    long time = System.currentTimeMillis();
     numOfComments = Integer.parseInt(quantity.equals("")?"1":quantity);
     
     boolean upperCase = Boolean.parseBoolean(getParameter(request, "upper-case", "false"));
@@ -81,6 +82,7 @@ public class DataServlet extends HttpServlet {
     //entity is an object to add to datastore for storing the comments perminantly
     Entity commentsEntity = new Entity("Comments");
     commentsEntity.setProperty("comment", text);
+    commentsEntity.setProperty("time", time);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentsEntity);

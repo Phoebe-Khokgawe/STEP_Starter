@@ -106,11 +106,11 @@ function loadComments(){
             console.log(maxComments + 'Maximum comments');
         const taskListElement = document.getElementById('comments-list');
     //printout the response
-    //try normal for loop
-        const displayedComments = maxComments < comments.length ? maxComments : comments.length;
+        //number of comments to display
+        const displayedComments = maxComments == 0? comments.length : maxComments < comments.length ? maxComments : comments.length;
         taskListElement.innerHTML = 'Displaying ' + displayedComments + ' comments'; 
 
-        for (i = 1; i < displayedComments; i++) {
+        for (i = 0; i < displayedComments; i++) {
             taskListElement.appendChild(createCommentElement(comments[i]));
         }
   });
@@ -132,6 +132,7 @@ function deleteAllComments(){
     .then((reload) => {
         loadComments();
     });
+    console.log('All comments are deleted');
 
 }
 
