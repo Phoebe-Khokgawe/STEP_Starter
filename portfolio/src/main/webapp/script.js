@@ -27,31 +27,18 @@ function addRandomGreeting() {
  const greetingContainer = document.getElementById('greeting-container');
  greetingContainer.innerText = greeting;
 }
-
-/**
- * Move the current index to the next picture and display it.
- * @param {*} prefix -- prefix of the current HTML page.
- * @param {*} numPictures -- total number of pictures in the page.
- */
+ 
 function nextPicture(prefix,numPictures){
    currentIndex = (currentIndex + 1) % numPictures;
    showImageAndDescription(prefix);
 }
-
-/**
- * Move the current index to the previous picture and display it.
- * @param {*} prefix -- prefix of the current HTML page.
- * @param {*} numPictures -- total number of pictures in the page.
- */
+ 
 function prevPicture(prefix,numPictures){
    currentIndex = (currentIndex - 1) % numPictures;
    showImageAndDescription(prefix);
 }
  
-/**
- * Display the current image with it's description base on the HTML page.
- * @param {*} prefix -- prefix of the current HTML page.
- */
+ 
 function showImageAndDescription(prefix){
    if(currentIndex < 0){return;}
    const proDescription = ['Hi My name is Phoebe Khokgawe. I am 21 years old.',
@@ -87,6 +74,7 @@ function showImageAndDescription(prefix){
    imageContainer.innerHTML = '';
    imageContainer.appendChild(imgElement);
 }
+
 // /** Adds data to the DOM. */
 // function addDataToDom(data) {
 //   console.log('Adding text to dom: ' + data);
@@ -135,6 +123,5 @@ function deleteAllComments(){
     console.log('All comments are deleted');
 
 }
-
  
 
