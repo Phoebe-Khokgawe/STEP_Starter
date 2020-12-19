@@ -15,15 +15,14 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -96,15 +95,4 @@ public class DataServlet extends HttpServlet {
     return value == null ? defaultValue : value;
   }
 
-  /**
-   * Convert normal string to JSON type string.
-   * @param string -- normal string.
-   * @return JSON type string.
-   */
-  public String convertToJSON(String string){
-        Gson gson = new Gson();
-        String[] spliString = string.split(",");
-        String jsonString = "{\"type\": \"" + spliString[0]  + "\", \"color\": \"" + spliString[1] + "\"}"; 
-        return jsonString;
-  }
 }

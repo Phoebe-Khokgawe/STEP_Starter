@@ -122,6 +122,5 @@ function deleteAllComments(){
     console.log('All comments are deleted');
 
 }
-
  
 
