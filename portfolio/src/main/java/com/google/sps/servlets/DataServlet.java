@@ -36,8 +36,6 @@ import com.google.gson.Gson;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-   private int numOfComments = 1;
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -64,7 +62,7 @@ public class DataServlet extends HttpServlet {
     String text = getParameter(request, "comment", "");
     String quantity = getParameter(request,"quantity","4");
     long time = System.currentTimeMillis();
-    numOfComments = Integer.parseInt(quantity.equals("")?"1":quantity);
+    int numOfComments = Integer.parseInt(quantity);
     
     boolean upperCase = Boolean.parseBoolean(getParameter(request, "upper-case", "false"));
     
@@ -95,10 +93,7 @@ public class DataServlet extends HttpServlet {
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
+    return value == null ? defaultValue : value;
   }
 
   /**

@@ -36,7 +36,7 @@ public class DeleteData extends HttpServlet {
     Query query = new Query("Comments").addSort("comment", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-
+    
     for (Entity entity : results.asIterable()) {
         datastore.delete(entity.getKey());
     }
