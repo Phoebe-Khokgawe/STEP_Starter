@@ -1,5 +1,5 @@
 target/
 .idea
 .classpath
-portfolio/.settings/*
-../walkthroughs/*
+portfolio/.settings/**
+walkthroughs/**
