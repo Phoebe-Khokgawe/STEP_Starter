@@ -61,7 +61,7 @@ public class DataServlet extends HttpServlet {
     String text = getParameter(request, "comment", "");
     String quantity = getParameter(request,"quantity","4");
     long time = System.currentTimeMillis();
-    int numOfComments = Integer.parseInt(quantity);
+    int numOfComments = Integer.parseInt(quantity.equals("")?"1":quantity);
     
     boolean upperCase = Boolean.parseBoolean(getParameter(request, "upper-case", "false"));
     
