@@ -74,5 +74,53 @@ function showImageAndDescription(prefix){
    imageContainer.innerHTML = '';
    imageContainer.appendChild(imgElement);
 }
+// /** Adds data to the DOM. */
+// function addDataToDom(data) {
+//   console.log('Adding text to dom: ' + data);
+
+//   const dataContainer = document.getElementById('data-container');
+//   dataContainer.innerText = data;
+// }
+
+/**
+ * Fetch all the comments from the server and add it to DOM.
+ */
+function loadComments(){
+    var maxComments = document.getElementById("quantity").value;
+    fetch('/data?quantity=' + maxComments)
+        .then(response => response.json())
+        .then((comments) => {
+            console.log(maxComments + 'Maximum comments');
+        const taskListElement = document.getElementById('comments-list');
+    //printout the response
+        //number of comments to display
+        const displayedComments = maxComments == 0? comments.length : maxComments < comments.length ? maxComments : comments.length;
+        taskListElement.innerHTML = 'Displaying ' + displayedComments + ' comments'; 
+
+        for (i = 0; i < displayedComments; i++) {
+            taskListElement.appendChild(createCommentElement(comments[i]));
+        }
+  });
+}
+
+function createCommentElement(comment){
+    const commentElement = document.createElement('li');
+    commentElement.innerText = comment;
+
+    console.log('print' + comment);
+  
+  return commentElement;
+
+}
+
+function deleteAllComments(){
+    const request = new Request('/delete-data', {method: 'POST'});
+    fetch(request)
+    .then((reload) => {
+        loadComments();
+    });
+    console.log('All comments are deleted');
+
+}
  
 
