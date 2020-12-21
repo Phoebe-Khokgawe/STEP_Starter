@@ -126,17 +126,24 @@ getGoogleAPILink();
 
 function createGoogleMap() {
     console.log("going");
-  var map = new google.maps.Map(
+    var map = new google.maps.Map(
       document.getElementById('map'),
       {center: {lat: -33.864933730676675, lng: 151.1961065202642}, zoom: 8});
 
-      map.setMapTypeId('satellite');
+    map.setMapTypeId('satellite');
       
-    const googleSydneyOffice = new google.maps.Marker({
-    position: {lat: -33.864933730676675, lng: 151.1961065202642},
-    map: map,
-    title: 'Google Sydney office'
-  });
+    const googleSydneyMarker = new google.maps.Marker({
+        position: {lat: -33.864933730676675, lng: 151.1961065202642},
+        map: map,
+        title: 'Google Sydney office'
+    });
+
+    const markerDescription = 'Address: Ground floor, 48 Pirrama Rd, Pyrmont NSW 2009, Australia';
+    const infoWindow = new google.maps.InfoWindow({
+    content: markerDescription,
+    });
+
+    infoWindow.open(map,googleSydneyMarker);
 }
 
 function getGoogleAPILink(){

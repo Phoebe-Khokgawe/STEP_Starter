@@ -3,3 +3,4 @@ target/
 .classpath
 portfolio/.settings/**
 walkthroughs/**
+portfolio/src/main/webapp/keys.js
