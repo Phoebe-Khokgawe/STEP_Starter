@@ -122,5 +122,28 @@ function deleteAllComments(){
     console.log('All comments are deleted');
 
 }
+getGoogleAPILink();
+
+function createGoogleMap() {
+    console.log("going");
+  var map = new google.maps.Map(
+      document.getElementById('map'),
+      {center: {lat: -33.864933730676675, lng: 151.1961065202642}, zoom: 8});
+
+      map.setMapTypeId('satellite');
+      
+    const googleSydneyOffice = new google.maps.Marker({
+    position: {lat: -33.864933730676675, lng: 151.1961065202642},
+    map: map,
+    title: 'Google Sydney office'
+  });
+}
+
+function getGoogleAPILink(){
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=' + keys.mapAPI1;
+    document.head.appendChild(script);
+}
  
 
