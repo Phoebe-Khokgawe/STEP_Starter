@@ -139,6 +139,7 @@ function createGoogleMap() {
 }
 
 function getGoogleAPILink(){
+    console.log(document.getElementById("APIKeyScrip"));
     var link = document.getElementById("APIKeyScrip");
     link.src = "https://maps.googleapis.com/maps/api/js?key="+ keys.mapAPI1;
     document.head.appendChild(link);
