@@ -122,5 +122,19 @@ function deleteAllComments(){
     console.log('All comments are deleted');
 
 }
+
+function createGoogleMap() {
+  var map = new google.maps.Map(
+      document.getElementById('map'),
+      {center: {lat: -33.864933730676675, lng: 151.1961065202642}, zoom: 8});
+
+      map.setMapTypeId('satellite');
+      
+    const googleSydneyOffice = new google.maps.Marker({
+    position: {lat: -33.864933730676675, lng: 151.1961065202642},
+    map: map,
+    title: 'Google Sydney office'
+  });
+}
  
 
