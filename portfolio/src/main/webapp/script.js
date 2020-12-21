@@ -122,6 +122,7 @@ function deleteAllComments(){
     console.log('All comments are deleted');
 
 }
+getGoogleAPILink();
 
 function createGoogleMap() {
   var map = new google.maps.Map(
@@ -135,6 +136,12 @@ function createGoogleMap() {
     map: map,
     title: 'Google Sydney office'
   });
+}
+
+function getGoogleAPILink(){
+    var link = document.getElementById("APIKeyScrip");
+    link.src = "https://maps.googleapis.com/maps/api/js?key="+ keys.mapAPI1;
+    document.head.appendChild(link);
 }
  
 
