@@ -41,16 +41,13 @@ public final class FindMeetingQuery {
             for (Event event : allEvents) {
                 if(!attendeesIsInThisMeeting(event,request)){continue;}
                 validStartTime = checkReturnValidStartTime(event);
-                System.out.println("Valid start time before: " + validStartTime);
                 if (validStartTime > event.getWhen().start()) {
                     checkLastEvent(allEvents.size());
                     continue;
                 }
                 freeTimeRange.add(TimeRange.fromStartEnd(validStartTime, event.getWhen().start(), false));
                 validStartTime = event.getWhen().end();
-                System.out.println("Valid start time after: " + validStartTime);
                 checkLastEvent(allEvents.size());
-                System.out.println(freeTimeRange.toString());
                 index++;
             }
 
