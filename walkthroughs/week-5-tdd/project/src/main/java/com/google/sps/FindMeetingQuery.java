@@ -27,54 +27,70 @@ public final class FindMeetingQuery {
 
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
 
-        //don't consider the event that the attendees are not joining
-        for(Event event : events){
-            if(attendeesIsInThisMeeting(event,request)){
+        //don't consider the event of the attendees that are not joining
+        for (Event event : events) {
+            if (attendeesIsInThisMeeting(event, request)) {
                 this.allEvents.add(event);
             }
         }
 
-        if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) return new ArrayList<TimeRange>();
-        else if (request.getAttendees().isEmpty() || allEvents.isEmpty()) return Arrays.asList(TimeRange.WHOLE_DAY);
-        else {
-            //checking through all the events and find the free time during the day
-            for (Event event : allEvents) {
-                if(!attendeesIsInThisMeeting(event,request)){continue;}
-                validStartTime = checkReturnValidStartTime(event);
-                if (validStartTime > event.getWhen().start()) {
-                    checkLastEvent(allEvents.size());
-                    continue;
-                }
-                freeTimeRange.add(TimeRange.fromStartEnd(validStartTime, event.getWhen().start(), false));
-                validStartTime = event.getWhen().end();
-                checkLastEvent(allEvents.size());
-                index++;
+        if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
+            return new ArrayList<TimeRange>();
+        } else if (allEvents.isEmpty()) {
+            return Arrays.asList(TimeRange.WHOLE_DAY);
+        } else if (request.getAttendees().isEmpty() && !request.getOptionalAttendees().isEmpty()) {
+            findTimeRangeForTheMeetingRequest(request, false);
+            if (freeTimeRange.isEmpty()) {
+                return Arrays.asList(TimeRange.WHOLE_DAY);
             }
+        } else {
+            findTimeRangeForTheMeetingRequest(request, true);
 
             //check that the free time that's given is enough for the person to have a meeting
             for (TimeRange range : freeTimeRange) {
                 freeTimeDuration += range.duration();
                 if (freeTimeDuration >= request.getDuration()) return freeTimeRange;
             }
+
             //not enough free time
             freeTimeRange.clear();
-
         }
+
         return freeTimeRange;
+    }
+
+    private void findTimeRangeForTheMeetingRequest(MeetingRequest request, boolean main) {
+        for (Event event : allEvents) {
+            if (!attendeesIsInThisMeeting(event, request) && main) {
+                continue;
+            }
+            validStartTime = checkReturnValidStartTime(event);
+            if (validStartTime >= event.getWhen().start()) {
+                checkLastEvent(allEvents.size());
+                continue;
+            }
+            freeTimeRange.add(TimeRange.fromStartEnd(validStartTime, event.getWhen().start(), false));
+            validStartTime = event.getWhen().end();
+            checkLastEvent(allEvents.size());
+            index++;
+        }
     }
 
     /**
      * The valid start time is where there's no conflict within the given event.
+     *
      * @param event -- current event
      * @return if there's no conflict -- original validStartTime
-     *         if there's conflict -- ending time of the given event
+     * if there's conflict -- ending time of the given event
      */
     private int checkReturnValidStartTime(Event event) {
-        return event.getWhen().contains(validStartTime) ? event.getWhen().end() : validStartTime;
+        return event.getWhen().contains(validStartTime) || event.getWhen().start() == validStartTime ?
+                event.getWhen().end() : validStartTime;
     }
 
     /**
      * The last event need to be added specifically if the END_OF_DAY time.
+     *
      * @param size -- total valid events
      */
     private void checkLastEvent(int size) {
@@ -85,18 +101,19 @@ public final class FindMeetingQuery {
 
     /**
      * Check if the attendees in the current event is in the meeting.
-     * @param event -- current event
+     *
+     * @param event   -- current event
      * @param request -- current meeting request
      * @return true -- attendee is in the meeting
-     *         false -- attendee is not in the meeting
+     * false -- attendee is not in the meeting
      */
     private boolean attendeesIsInThisMeeting(Event event, MeetingRequest request) {
         for (String attendee : event.getAttendees()) {
-            if (!request.getAttendees().contains(attendee)) {
-                return false;
+            if (request.getAttendees().contains(attendee) || request.getOptionalAttendees().contains(attendee)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
 }
